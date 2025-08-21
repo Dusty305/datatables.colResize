@@ -1,11 +1,14 @@
 /**
  * @summary     ColResize
  * @description Provide the ability to resize columns in a DataTable
- * @version     1.6.1
+ * @version     1.7.2-fork.0
  * @file        jquery.dataTables.colResize.js
- * @author      Daniel Hobi, Lado Tadic, Daniel Petras
+ * @author      Daniel Hobi, Lado Tadic, Daniel Petras (Original authors)
+ * @author      Ivan Boev (Fork maintanier)
  * Language:    Javascript
  * License:     MIT
+ *
+ * This is a fork of the original project.
  */
 (function (factory) {
     if (typeof define === 'function' && define.amd) {
@@ -195,9 +198,10 @@
          */
         _fnConstruct: function () {
             let self = this;
+            let $scroll = $(self.s.dt.nTable.parentNode.parentNode);
 
             // register document events
-            $(document).on('mousemove.ColResize touchmove.ColResize', function (e) {
+            $scroll.on('mousemove.ColResize touchmove.ColResize', function (e) {
                 if (self.s.state.isDragging) {
                     let changedWidth = self._fnGetXCoords(e) - self.s.state.startX;
                     self._fnApplyWidth(changedWidth, self.s.state.$element, self.s.state.column);
@@ -222,7 +226,7 @@
                     }
                 }
             });
-            $(document).on('mouseup.ColResize touchend.ColResize', function () {
+            $scroll.on('mouseup.ColResize touchend.ColResize', function () {
                 if (self.s.state.isDragging) {
                     // workaround to prevent sorting on column click
                     setTimeout(function () {
@@ -378,7 +382,7 @@
             }
         },
         _fnApplyWidthColumn: function (column, width) {
-            $(column.nTh).outerWidth(width + 'px');
+            $(column.nTh).width(width + 'px');
             column.sWidth = width + 'px';
         },
         _fnGetCurrentWidth: function ($node) {
